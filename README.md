@@ -206,7 +206,7 @@ To create new admin user you must the following steps:
 
 ##### Using AWS CLIS
 
-1- Firstly, create a new group with AWS cli you tape in a terminal:
+1- Firstly, create a new group with AWS cli you type in a terminal:
 
 ```shell
 aws iam create-group --group-name <name-of-group>
@@ -317,6 +317,12 @@ aws iam create-login-profile --user-name admin1 --generate-cli-skeleton > admin1
 
 ***Note***:
 If you want to update his password then use [update-login-profile](https://docs.aws.amazon.com/cli/latest/reference/iam/update-login-profile.html) instead.
+You can create access key for given user to use `AWS CLI` by using the following command
+```shell
+aws iam create-access-key --user-name userAccounName
+```
+replace `userAccounName` with the given user.
+
 
 4- Forthly, add created user to a specified group by typing
 ```shell
@@ -344,7 +350,7 @@ IAM user can sign in to console following a link look like `https://Your_Account
 
 - if your are already signed in then on the top bar menu click `Support` then `Support Center` and you will see your id on the top of left pane menu near to `Account number: Your_Account_ID`. 
 - If its your first time then ask the admin to give you more detail on your account.
-In case you are using `AWS CLI` then tape on your terminal:
+In case you are using `AWS CLI` then type on your terminal:
   ```shell
   aws sts get-caller-identity
   ```
@@ -399,3 +405,32 @@ In case you want to search for some feature in IAM then user a IAM search sectio
 - Tasks that match your search keywords
 
 To use search feature navigate to main [IAM page](https://console.aws.amazon.com/iam/) on the left pane menu look for search box click on it then type your search query, a list of results will display each item is link lead you to that page.
+
+##### Delegate Access to the Billing Console
+
+To delegate an IAM user to access the AWS Biilling & Cost mangement data will make a scenario to walk you through those steps, they are 4, as the mentioned below:
+
+1. Enable access to billing & cost management:
+First, activate billing access for your test users. To do this, see [Activating Access to the Billing and Cost Management Console](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/control-access-billing.html) in the AWS Billing and Cost Management User Guide.
+2. Create policies: 
+Second, you must follow those steps:
+  
+    a. Sign in to console as user with administrator credentials
+    b. Go to [IAM home page](https://console.aws.amazon.com/iam/)
+    c. On left navigation pane click `Policies`
+    d. Click `Create policy` button on top
+    e. On `Visual editor` editor tab click `Choose a service`(look like a link) then choose `Billing`
+    f. For full access to the billing & cost management check the box of `All Billing actions` & for read-only access select the check box next to `Read`
+    g. Click `Review policy` give it a name like *BillingFullAccess* for full access & *BillingViewAccess* for read-only access then click `Create policy` button.
+
+3. Attach policies:
+Third step is to attach created policies from above, which are *BillingFullAccess* & *BillingViewAccess* to the right group, user or role, but for [best practice](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) will use groups then add users who need those permission to the right group. You can do that following:
+
+    a. Navigate to `Policies` section using left navigation
+    b. In search box type your policy, one of *BillingFullAccess* or *BillingViewAccess*, then select the check box on the left of policy name
+    c. Click on `Policy actions` on top then click `Attach`
+    d. Finally select the check box at left of  name of group after that click `Attach policy`
+
+4. Test if it work as expected
+To test if it worck well sign in using one user from each group *BillingFullAccess* & *BillingViewAccess*. In console header menu click on On the navigation bar, choose username@<account alias or ID number> & choose `My Billing Dashboard`. finally, on this page mess arround by selecting a check boxes & try to save for user in group who has policy *BillingFullAccess* they can update but for user in group who has *BillingViewAccess* they can't edit anything.
+

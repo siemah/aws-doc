@@ -434,3 +434,43 @@ Third step is to attach created policies from above, which are *BillingFullAcces
 4. Test if it work as expected
 To test if it worck well sign in using one user from each group *BillingFullAccess* & *BillingViewAccess*. In console header menu click on On the navigation bar, choose username@<account alias or ID number> & choose `My Billing Dashboard`. finally, on this page mess arround by selecting a check boxes & try to save for user in group who has policy *BillingFullAccess* they can update but for user in group who has *BillingViewAccess* they can't edit anything.
 
+##### Create & Attach Your First Customer Managed Policy
+
+To create & attach `Customer Managed Policy` in this tutorial, you need to already have the following:
+- AWS account
+- A test IAM user(to attach created poilicy to it)
+
+***Note***:
+Will customize an existing AWS policy in those steps, create a policy for listing(view only) the IAM service.
+
+Firstly, will create new policy by following those steps:
+
+1. Go to [IAM](https://console.aws.amazon.com/iam/) home page in AWS console
+2. On top click the button `Create policy`
+3. Choose `JSON` then replace all existing content with
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [ {
+        "Effect": "Allow",
+        "Action": [
+            "iam:GenerateCredentialReport",
+            "iam:Get*",
+            "iam:List*"
+        ],
+        "Resource": "*"
+    } ]
+}
+```
+after, replacing content click `Review policy`
+4. In this section you will give a **name** to that policy by filling the input field, will name it **IAMListOnly** & you can add a description for that policy for more details on it
+5. Finaly, click `Create policy` button
+
+Secondly, will attach the policy just created to `test` or anyone of your IAM users:
+
+1.In the left of your [IAM](https://console.aws.amazon.com/iam/) click `Policies`
+2. Search for your created policy using filters(`search input` & `filter policies`) click on `filter policies` then select the check box **Customer Managed** that will list just your created policy
+3. Select the policy just created **IAMListOnly** then click on `Policy actions` after that click `attach`
+4. Select the check box of user who want to attach that policy to(you can use filter like in *step 2*) & finally click `Attach policy`
+
+Thirdly & finally, you can sign in with the credentials of `test` user(in this case) & try to create new user/group/policy, an error message will showed saying you are not allowed to do that action. However you can see the list of all users, group or policies.. 
